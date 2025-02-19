@@ -5,14 +5,19 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { LoaderPinwheel } from 'lucide-react';
 import { v4 as uuidv4 } from "uuid";
+import { chatSession } from '../../utils/gemini.ts';
+
 function AddNew() {
     const [dialogState, setDialogState] = useState(false);
     const [jobRole, setJobRole] = useState('');
     const [jobDescription, setJobDescription] = useState('');
     const [yearsOfExperience, setYearsOfExperience] = useState('');
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [jsonResponse, setJsonResponse] = useState('');
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    
+    
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -22,25 +27,39 @@ function AddNew() {
             jobRole,
             jobDescription,
             yearsOfExperience: Number(yearsOfExperience),
-            interviewId: uuidv4()
+            interviewId: uuidv4(),
         };
-    
+
+        const InputPrompt = `Generate 5 tailored interview questions based on the ${jobRole}, ${jobDescription}, and ${yearsOfExperience}. Carefully consider the candidate's level of expertise based on ${yearsOfExperience}, the job requirements based on the ${jobDescription}, and the necessary skills and qualifications needed for the position based on ${jobRole}. Aim is to create a list of pertinent, technical, and insightful interview questions that will effectively assess the candidate's suitability for the given ${jobRole}. Only Generate Questions and their Answers in JSON file format strictly with no Markdown tags or styling or new line tags.`;
+        
         try {
+            const result = await chatSession.sendMessage(InputPrompt);
+            const JSONResponse = result.response.text().replace('```json', '').replace('```', '').trim();
+            
+            setJsonResponse(JSONResponse);
+
+            // Add JSONResponse to formData
+            console.log("JSONResponse:", JSONResponse);
+            // formData.generatedQuestions = JSONResponse;  
+
             const response = await axios.post('http://localhost:3000/api/job', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-    
-            console.log("Response from server:", response.data);
-            
+
+            console.log("Response from server:", response.data.job);
+
+            if (response.data.job.interviewId) {
+                router.replace(`/interview/${response.data.job.interviewId}`);
+            } else {
+                console.error("interviewId is missing in the response:", response.data);
+            }
+        } catch (error) {
+            console.error("Error processing request:", error);
+        } finally {
             setLoading(false);
             setDialogState(false);
-            console.log(response);
-            router.push(`/dashboard/interview/${response.data.interviewId}`); // Adjust based on API response
-        } catch (error) {
-            console.error("Error saving data:", error);
-            setLoading(false);
         }
     };
 
