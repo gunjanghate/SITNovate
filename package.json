@@ -9,10 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-
-    "@google/generative-ai": "^0.21.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@google/generative-ai": "^0.21.0",
     "@mui/material": "^6.4.5",
     "@radix-ui/react-dialog": "^1.1.6",
     "axios": "^1.7.9",
@@ -25,7 +24,9 @@
     "next": "15.1.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-speech-to-text": "^0.8.0",
     "react-webcam": "^7.2.0",
+    "sonner": "^2.0.0",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-motion": "^1.1.0",

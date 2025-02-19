@@ -8,6 +8,7 @@ import logo1 from "./logo.png";
 import { div } from 'framer-motion/client';
 // import Logout from './logout';
 // import { useSession } from 'next-auth/react';
+import { PointerWrapper } from "../components/magicui/pointer";
 
 export default function Navbar() {
     // const { data: session } = useSession();
@@ -18,6 +19,8 @@ export default function Navbar() {
     };
 
     return (
+        // <PointerWrapper>
+
         <div className=' bg-black'>
 
         <nav className=" drop-shadow-2xl rounded-b-xl motion-preset-slide-down-lg">
@@ -108,5 +111,6 @@ export default function Navbar() {
             )}
         </nav>
         </div>
+        // </PointerWrapper>
     );
 }

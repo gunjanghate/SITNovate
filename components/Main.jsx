@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { HeroHighlight, Highlight } from "../components/ui/hero-highlight"
+import { PointerWrapper } from "../components/magicui/pointer";
 
 
 function Main() {
@@ -19,6 +20,8 @@ function Main() {
   };
 
   return (
+    // <PointerWrapper>
+
     <div className="min-h-screen bg-gradient-to-b from-black to-neutral-950">
       
       <HeroHighlight>
@@ -115,6 +118,7 @@ function Main() {
         </motion.div>
       </div>
     </div>
+    // {/* </PointerWrapper> */}
   );
 }
 
