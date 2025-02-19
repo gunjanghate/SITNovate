@@ -71,3 +71,16 @@ export const handleJobByIdFetch = (async (req, res) => {
 });
 
 
+export const handleGetQuestionsById = async (req, res) => {
+    try {
+        const job = await Job.find({interviewId: req.params.interviewId});
+        if (!job) {
+            return res.status(404).json({ error: "Job not found" });
+        }
+        res.status(200).json( job[0].questions );
+    } catch (error) {
+        console.error("Database error:", error);
+        res.status(500).json({ error: "Failed to fetch job" });
+    }
+};
+
