@@ -21,39 +21,44 @@ function AddNew() {
     const onSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-     
+    
         const formData = {
             jobRole,
             jobDescription,
             yearsOfExperience: Number(yearsOfExperience),
             interviewId: uuidv4(),
-            questions:[...questions],
-        
+            questions: [...questions], // Ensure questions is an array
         };
-
+    
         const InputPrompt = `Generate 5 tailored interview questions based on the ${jobRole}, ${jobDescription}, and ${yearsOfExperience}. Carefully consider the candidate's level of expertise based on ${yearsOfExperience}, the job requirements based on the ${jobDescription}, and the necessary skills and qualifications needed for the position based on ${jobRole}. Aim is to create a list of pertinent, technical, and insightful interview questions that will effectively assess the candidate's suitability for the given ${jobRole}. Only Generate Questions and their Answers in JSON file format strictly with no Markdown tags or styling or new line tags.`;
-        
+    
         try {
             const result = await chatSession.sendMessage(InputPrompt);
             console.log("Result from GPT-3:", result.response.text());
-            const JSONResponse = result.response.text().replace('```json', '').replace('```', '').trim();
-            
+    
+            let JSONResponse = result.response.text().replace('```json', '').replace('```', '').trim();
+    
+            try {
+                JSONResponse = JSON.parse(JSONResponse); // ✅ Convert string to JSON
+            } catch (error) {
+                console.error("Failed to parse JSON response:", error);
+                return;
+            }
+    
             setJsonResponse(JSONResponse);
-            setquestions(JSONResponse);
-            console.log("Questions:", questions);
-            formData.questions = JSONResponse;
-
-            // Add JSONResponse to formData
-            // console.log("JSONResponse:", JSONResponse);
-
+            setquestions(JSONResponse); // ✅ Set as an array
+            formData.questions = JSONResponse; // ✅ Assign parsed array to formData.questions
+    
+            console.log("Parsed Questions:", formData.questions);
+    
             const response = await axios.post('http://localhost:3000/api/job', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-
+    
             console.log("Response from server:", response.data.job);
-
+    
             if (response.data.job.interviewId) {
                 router.replace(`/interview/${response.data.job.interviewId}`);
             } else {
@@ -66,6 +71,7 @@ function AddNew() {
             setDialogState(false);
         }
     };
+    
 
     React.useEffect(() => {
         setIsButtonDisabled(!(jobRole && jobDescription && yearsOfExperience));
