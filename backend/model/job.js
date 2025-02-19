@@ -1,23 +1,40 @@
 import mongoose from "mongoose";
 
+const questionSchema = new mongoose.Schema({
+    question: {
+        type: String,
+        required: true
+    },
+    answer: {
+        type: String,
+        default: ""  // Allow empty answers
+    }
+}, { _id: false });
+
 const jobSchema = new mongoose.Schema({
-    jobRole:{
+    jobRole: {
         type: String,
         required: true
     },
-    jobDescription:{
+    jobDescription: {
         type: String,
         required: true
     },
-    yearsOfExperience:{
+    yearsOfExperience: {
         type: Number,
         required: true
     },
-    interviewId:{
-        type:String,    
-        required: true
+    interviewId: {
+        type: String,
+        required: true,
+        unique: true  // Ensures no duplicate interview IDs
     },
-},{timestamps: true});
+    questions: {
+        type: [questionSchema], 
+        default: []   // Ensures it's an array by default
+    }
+}, { timestamps: true });
+
 const Job = mongoose.model("Job", jobSchema);
 
 export default Job;

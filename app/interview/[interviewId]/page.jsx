@@ -30,7 +30,7 @@ function Interview() {
         console.log('API Response:', response.data);
         setInterviewData(response.data.job[0]);  // Extract first job object
       } else {
-        console.warn('No job data found in API response');
+        console.warn('No job data found in API response it is');
       }
     } catch (error) {
       console.error('Error fetching interview details:', error);

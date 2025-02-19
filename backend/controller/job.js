@@ -2,24 +2,46 @@ import Job from "../model/job.js";
 // import { v4 as uuidv4 } from "uuid";
 
 export const handleJobUpload = async (req, res) => {
-    const { jobRole, jobDescription, yearsOfExperience, interviewId } = req.body;
+    let { jobRole, jobDescription, yearsOfExperience, interviewId, questions } = req.body;
     console.log(req.body);
-    // const uuid = uuidv4();
+
+    // ✅ Ensure all required fields are provided
     if (!jobRole || !jobDescription || !yearsOfExperience) {
         return res.status(400).json({ error: "All fields are required" });
-    }  
+    }
+
     try {
-        
-        const newJob = new Job({ jobRole, jobDescription, yearsOfExperience, interviewId});
+        // ✅ Check if `questions` is a string (which happens when sent incorrectly)
+        if (typeof questions === "string") {
+            try {
+                questions = JSON.parse(questions);  // Parse into an array
+            } catch (error) {
+                return res.status(400).json({ error: "Invalid questions format" });
+            }
+        }
+
+        // ✅ Ensure `questions` is always an array
+        if (!Array.isArray(questions)) {
+            return res.status(400).json({ error: "Questions must be an array" });
+        }
+
+        const newJob = new Job({
+            jobRole,
+            jobDescription,
+            yearsOfExperience,
+            interviewId,
+            questions
+        });
+
         await newJob.save();
         res.status(201).json({ message: "Job uploaded successfully", job: newJob });
-        
+
     } catch (error) {
         console.error("Database error:", error);
         res.status(500).json({ error: "Failed to save job" });
-        
     }
 };
+
 
 
 export const handleJobFetch = async (req, res) => {
