@@ -1,4 +1,4 @@
-"use client"; // This tells Next.js that it's a Client Component
+"use client"; 
 
 import { useState } from "react";
 import axios from "axios";
@@ -11,6 +11,7 @@ import {
   MenuItem,
   Container,
 } from "@mui/material";
+import FormattedResponse from "./../../components/FormattedResponse"; // Import the formatted response component
 
 const API_URL = "https://supa-resume-backend.onrender.com/analyze_resume/";
 
@@ -49,7 +50,6 @@ export default function Home() {
     setLoading(false);
   };
 
-  // Map promptType to a user-friendly button label
   const buttonLabels = {
     resume_analysis: "Analyze Resume",
     ats_match: "Check ATS Match",
@@ -93,11 +93,8 @@ export default function Home() {
         {loading ? <CircularProgress size={24} /> : buttonLabels[promptType]}
       </Button>
 
-      {result && (
-        <Typography variant="h6" marginTop={2} color="primary">
-          {result}
-        </Typography>
-      )}
+      {/* Render formatted AI response */}
+      {result && <FormattedResponse result={result} />}
     </Container>
   );
 }
