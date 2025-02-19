@@ -10,7 +10,7 @@ function Main() {
   const router = useRouter();
 
   const handleStartNowClick = () => {
-    router.push("/ResumeLanding");
+    router.push("/resume");
   };
 
   const handleInterviewPrepClick = () => {
