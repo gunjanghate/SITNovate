@@ -18,8 +18,7 @@ export const metadata: Metadata = {
   description: "get hired quickly by SupaHire",
 };
 
-export default function RootLayout({
-  children,
+export default function RootLayout({  children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
