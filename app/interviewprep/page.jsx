@@ -33,10 +33,11 @@ function AddNew() {
             });
     
             console.log("Response from server:", response.data);
-    
+            
             setLoading(false);
             setDialogState(false);
-            router.push(`/dashboard/interview/${response.data.id}`); // Adjust based on API response
+            console.log(response);
+            router.push(`/dashboard/interview/${response.data.interviewId}`); // Adjust based on API response
         } catch (error) {
             console.error("Error saving data:", error);
             setLoading(false);

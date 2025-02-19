@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
 
 const jobSchema = new mongoose.Schema({
-    job_role:{
+    jobRole:{
         type: String,
         required: true
     },
-    job_description:{
+    jobDescription:{
         type: String,
         required: true
     },
-    years_of_experience:{
+    yearsOfExperience:{
         type: Number,
         required: true
     },
