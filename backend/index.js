@@ -1,5 +1,6 @@
 import express from "express"
 import {connectDB} from './connectDb.js';
+import cors from 'cors';
 import jobRoutes from './routes/job.js';
 import dotenv from 'dotenv';
 import bodyParser from "body-parser";
@@ -7,6 +8,7 @@ dotenv.config();
 
 const PORT = 3000;
 const app = express();
+app.use(cors());
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));

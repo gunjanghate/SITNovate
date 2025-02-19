@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { LoaderPinwheel } from 'lucide-react';
-
+import { v4 as uuidv4 } from "uuid";
 function AddNew() {
     const [dialogState, setDialogState] = useState(false);
     const [jobRole, setJobRole] = useState('');
@@ -16,16 +17,30 @@ function AddNew() {
     const onSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-
-        const formData = { jobRole, jobDescription, yearsOfExperience };
-        console.log("Form Data Submitted:", formData);
-
-        setTimeout(() => {
+    
+        const formData = {
+            jobRole,
+            jobDescription,
+            yearsOfExperience: Number(yearsOfExperience),
+            interviewId: uuidv4()
+        };
+    
+        try {
+            const response = await axios.post('http://localhost:3000/api/job', formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            console.log("Response from server:", response.data);
+    
             setLoading(false);
             setDialogState(false);
-            console.log("Redirecting to /dashboard/interview/some-interview-id");
-            router.push('/dashboard/interview/some-interview-id');
-        }, 2000);
+            router.push(`/dashboard/interview/${response.data.id}`); // Adjust based on API response
+        } catch (error) {
+            console.error("Error saving data:", error);
+            setLoading(false);
+        }
     };
 
     React.useEffect(() => {
