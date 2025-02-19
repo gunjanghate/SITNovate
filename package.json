@@ -9,13 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
-<<<<<<< HEAD
+
     "@google/generative-ai": "^0.21.0",
-=======
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^6.4.5",
->>>>>>> e0e813e07d783ea11d95e8775b05576fbd88a5ea
     "@radix-ui/react-dialog": "^1.1.6",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
