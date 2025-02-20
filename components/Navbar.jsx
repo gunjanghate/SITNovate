@@ -9,6 +9,8 @@ import { div } from 'framer-motion/client';
 // import Logout from './logout';
 // import { useSession } from 'next-auth/react';
 import { PointerWrapper } from "../components/magicui/pointer";
+import { SparklesText } from "../components/magicui/sparkles-text";
+
 
 export default function Navbar() {
     // const { data: session } = useSession();
@@ -30,20 +32,20 @@ export default function Navbar() {
                     <div className="flex items-center">
                         <Link href="/" className="flex items-center space-x-3 cursor-none">
                             <Image src={logo} width={70} height={90} alt="SmartHire Logo" />
-                            <span className="text-3xl tracking-tighter font-bold text-blue-500">SupaHire</span>
+                            <span className="text-3xl tracking-tighter font-bold text-blue-500"><SparklesText text="SupaPrep" /></span>
                         </Link>
                     </div>
 
                     
                     <div className="hidden md:flex items-center space-x-8">
                         <Link href="/" className="text-white  border-2 px-3 text-lg hover:text-blue-300 drop-shadow-xl hover:scale-110 hover:border-b-4 font-bold transition-all duration-500 rounded-sm py-1 border-white w-fit h-fit cursor-none">
-                            Dashboard
+                            Home
                         </Link>
-                        <Link href="/" className="text-white border-2 px-3 text-lg hover:text-blue-300 drop-shadow-xl hover:scale-110 hover:border-b-4 font-bold transition-all duration-500 rounded-sm py-1 border-white w-fit h-fit cursor-none">
+                        <Link href="#features" className="text-white border-2 px-3 text-lg hover:text-blue-300 drop-shadow-xl hover:scale-110 hover:border-b-4 font-bold transition-all duration-500 rounded-sm py-1 border-white w-fit h-fit cursor-none">
                             Features
                         </Link>
-                        <Link href="/" className="text-white border-2 px-3 text-lg hover:text-blue-300 drop-shadow-xl hover:scale-110 hover:border-b-4 font-bold transition-all duration-500 rounded-sm py-1 border-white w-fit h-fit cursor-none">
-                            About
+                        <Link href="/pricing" className="text-white border-2 px-3 text-lg hover:text-blue-300 drop-shadow-xl hover:scale-110 hover:border-b-4 font-bold transition-all duration-500 rounded-sm py-1 border-white w-fit h-fit cursor-none">
+                            Pricing
                         </Link>
                         {/* {session && (
                             <div className="flex items-center space-x-4">
@@ -88,13 +90,13 @@ export default function Navbar() {
                     >
                         <div className="px-6 pt-5 space-y-4">
                             <Link href="/" onClick={toggleDrawer} className="block text-[#3B82F6] hover:text-black py-2 rounded-md text-lg font-semibold">
-                                Dashboard
+                                Home
                             </Link>
-                            <Link href="/" onClick={toggleDrawer} className="block text-[#3B82F6] hover:text-black py-2 rounded-md text-lg font-semibold">
+                            <Link href="#features" onClick={toggleDrawer} className="block text-[#3B82F6] hover:text-black py-2 rounded-md text-lg font-semibold">
                                 Features
                             </Link>
-                            <Link href="/" onClick={toggleDrawer} className="block text-[#3B82F6] hover:text-black py-2 rounded-md text-lg font-semibold">
-                                About
+                            <Link href="/pricing" onClick={toggleDrawer} className="block text-[#3B82F6] hover:text-black py-2 rounded-md text-lg font-semibold">
+                                Pricing
                             </Link>
                             {/* {session && (
                                 <div className="flex items-center space-x-3 pt-4 border-t border-gray-200">

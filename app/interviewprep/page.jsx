@@ -82,12 +82,13 @@ function AddNew() {
     }, [jobRole, jobDescription, yearsOfExperience]);
 
     return (
-        <div>
+        <div className='bg-black text-white min-h-screen flex flex-col justify-start pt-12 lg:pt-48 items-center px-24 motion-preset-fade-sm'  >
+            <h1 className='text-3xl font-bold mb-8 motion-preset-expand' >Boost your Interview Preparation with <br /> <span className='text-blue-500 text-4xl '>SupaPrep's</span> ai-driven questions. </h1>
             <div
-                className='p-12 rounded-lg border border-slate-300 bg-slate-100 hover:bg-slate-200 transition-colors shadow-md cursor-pointer'
+                className='p-12 w-fit  rounded-lg border-2 hover:border-b-4 transition-all hover:scale-105 border-slate-300 duration-300 mx-auto shadow-md cursor-none motion-preset-flomoji-🚀'
                 onClick={() => setDialogState(true)}
             >
-                <h2 className='font-semibold text-lg text-center'>+ Create New</h2>
+                <h2 className='font-semibold text-xl text-center hover:text-blue-300'>Create New +</h2>
             </div>
 
             {dialogState && (

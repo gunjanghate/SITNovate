@@ -31,7 +31,11 @@ export default function RootLayout({  children,
 
         <Navbar />
         {children}
+        <div className="footer flex justify-center items-center h-16 text-white pt-5 bg-black">
+          <p>© 2025 ~ All Rights Reserved SupaHire</p>
+        </div>
           </PointerWrapper>
+
       </body>
     </html>
   );

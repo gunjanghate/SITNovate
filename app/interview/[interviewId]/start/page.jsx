@@ -6,12 +6,14 @@ import Questions from './_components/Questions';
 import { ArrowLeftCircle, ArrowRightCircle, Loader2Icon } from 'lucide-react';
 import Record from './_components/Record';
 import Link from 'next/link';
+import {useRouter} from 'next/navigation';
 
 function Start({ params }) {
   const [interviewId, setInterviewId] = useState(null);
   const [interviewData, setInterviewData] = useState(null);
   const [questionData, setQuestionData] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0);
+  const router = useRouter();
 
   // ✅ Unwrapping params correctly
   useEffect(() => {
@@ -87,11 +89,14 @@ function Start({ params }) {
               )}
             </div>
             {questionIndex === questionData.length - 1 && interviewData && (
-              <Link href={`/feed/feedback/${interviewId}`}>
-                <button className="flex gap-1 rounded-lg items-center bg-blue-700 text-white p-3 hover:bg-blue-800 transition-colors">
+              
+                <button className="flex gap-1 rounded-lg items-center bg-blue-700 text-white p-3 hover:bg-blue-800 transition-colors"
+                  onClick={() => {
+                    router.push(`/interview/${interviewId}/feedback`);
+                  }}>
                   End Interview
                 </button>
-              </Link>
+              
             )}
           </div>
         </>
