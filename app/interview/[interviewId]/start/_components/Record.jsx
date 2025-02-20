@@ -57,7 +57,7 @@ function Record({ questionData, questionIndex, interviewData }) {
       console.log("Parsed Feedback Response:", jsonFeedbackResponse);
   
       const response = await axios.post('http://localhost:3000/feed/feedback', {
-        interviewId: interviewData.interviewId,
+        interviewId: interviewId,
         feedback: jsonFeedbackResponse.feedback,
         rating: rating,
       });
@@ -132,7 +132,7 @@ function Record({ questionData, questionIndex, interviewData }) {
       </div>
 
       <button
-        onClick={sendAnswerToBackend}
+        onClick={sendAnswerToDatabase}
         className="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition-all disabled:bg-gray-500 disabled:cursor-not-allowed"
         disabled={loading}
       >
