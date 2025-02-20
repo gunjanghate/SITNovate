@@ -44,55 +44,59 @@ function Record({ questionData, questionIndex, interviewData }) {
     Keep feedback within 3-5 lines and return response in JSON format with "rating" and "feedback" fields.`;
 
     try {
-        const aiResult = await chatSession.sendMessage(feedbackPrompt);
-        console.log("AI Result:", aiResult);
-
-        // Parse JSON response
-        const feedbackResponse = (aiResult.response.text()).replace('```json', '').replace('```', '');
-        const jsonFeedbackResponse = JSON.parse(feedbackResponse);
-        console.log("Parsed Feedback Response:", jsonFeedbackResponse);
-
-        console.log("Interview Data:", interviewData);
-        // ✅ Save Feedback to DB
-        const res = await axios.post(`http://localhost:3000/feed/feedback`, {
-          interviewId: interviewId,
-            feedback: jsonFeedbackResponse.feedback,
-            rating: jsonFeedbackResponse.rating
-        });
-
-        if (res.status === 200) {
-            toast("Answer & Feedback saved Successfully!");
-        } else {
-            toast("Unexpected error occurred!");
-        }
+      const aiResult = await chatSession.sendMessage(feedbackPrompt);
+      console.log("AI Result:", aiResult);
+      const feedbackResponse = aiResult.response.text().replace('```json', '').replace('```', '');
+      const jsonFeedbackResponse = JSON.parse(feedbackResponse);
+  
+      const rating = Number(jsonFeedbackResponse.rating);
+      if (isNaN(rating)) {
+        throw new Error("Invalid rating received from AI response");
+      }
+  
+      console.log("Parsed Feedback Response:", jsonFeedbackResponse);
+  
+      const response = await axios.post('http://localhost:3000/feed/feedback', {
+        interviewId: interviewData.interviewId,
+        feedback: jsonFeedbackResponse.feedback,
+        rating: rating,
+      });
+  
+      if (response.status === 200) {
+        toast("Answer updated Successfully!");
+      } else {
+        toast("Unexpected error occurred!");
+      }
     } catch (error) {
         console.error("Error storing answer:", error);
         toast("Failed to save answer!");
     }
-
-
+  
     setUserAnswerResponse('');
     setLoading(false);
   };
-
+  
 
   return (
-    <div className={`flex flex-col justify-between p-3 gap-3 md:gap-5 ${loading ? 'opacity-15' : 'opacity-100'}`}>
-      {webCam ? (
-        <Webcam
-          onUserMedia={() => setWebCam(true)}
-          onUserMediaError={() => setWebCam(false)}
-          className="rounded-lg transition-all duration-150"
-        />
-      ) : (
-        <Image
-          src={"https://via.placeholder.com/500"} 
-          alt="Bliss"
-          height={500} 
-          width={500}
-          className="object-contain rounded-lg transition-all duration-150 w-full"
-        />
-      )}
+    <div className={`flex flex-col justify-between p-4 gap-5 transition-opacity ${loading ? 'opacity-50' : 'opacity-100'}`}>
+      
+      <div className="relative flex justify-center">
+        {webCam ? (
+          <Webcam
+            onUserMedia={() => setWebCam(true)}
+            onUserMediaError={() => setWebCam(false)}
+            className="rounded-xl shadow-lg border border-gray-300 transition-all duration-150"
+          />
+        ) : (
+          <Image
+            src="https://via.placeholder.com/500"
+            alt="Bliss"
+            height={500}
+            width={500}
+            className="object-contain rounded-xl shadow-lg border border-gray-300 transition-all duration-150 w-full"
+          />
+        )}
+      </div>
 
       <div className="flex justify-between items-center">
         <button
@@ -128,7 +132,7 @@ function Record({ questionData, questionIndex, interviewData }) {
       </div>
 
       <button
-        onClick={sendAnswerToDatabase}
+        onClick={sendAnswerToBackend}
         className="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition-all disabled:bg-gray-500 disabled:cursor-not-allowed"
         disabled={loading}
       >
