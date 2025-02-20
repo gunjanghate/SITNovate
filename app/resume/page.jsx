@@ -53,7 +53,6 @@ export default function Home() {
   const buttonLabels = {
     resume_analysis: "Analyze Resume",
     ats_match: "Check ATS Match",
-    project_suggestions: "Get Project Ideas",
     resume_improvement: "Improve Resume",
   };
 
