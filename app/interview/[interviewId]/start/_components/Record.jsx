@@ -5,23 +5,9 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import Webcam from 'react-webcam';
 import { toast } from 'sonner';
-import mongoose from 'mongoose';
+import axios from 'axios';
 import { chatSession } from '../../../../../utils/gemini';
 import { useSpeechRecognition } from "../../../../../hooks/useSpeechRecognition";
-
-// Connect to MongoDB
-mongoose.connect("mongodb+srv://shayanqureshi2411:SpZl9z3wjtJ6XnBW@cluster0.j96ad.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-const feedbackSchema = new mongoose.Schema({
-  interviewId: { type: String, unique: true },
-  feedback: String,
-  rating: Number,
-});
-
-const Feedback = mongoose.models.Feedback || mongoose.model("Feedback", feedbackSchema);
 
 function Record({ questionData, questionIndex, interviewData }) {
   const [userAnswerResponse, setUserAnswerResponse] = useState('');
@@ -45,42 +31,48 @@ function Record({ questionData, questionIndex, interviewData }) {
     isRecording ? stopRecording() : startRecording();
   };
 
-  const sendAnswerToDatabase = async () => {
+  const sendAnswerToBackend = async () => {
     setLoading(true);
-
+  
     const feedbackPrompt = `Question: ${questionData[questionIndex].question}, User Answer: ${userAnswerResponse}. On the basis of the question and user answer, give us rating (out of 5) for the answer and the feedback, if there is any area of improvement needed include it in the feedback. Also compare with the Default Answer: ${questionData[questionIndex].answer} for ease of comparison. Keep the feedback of 3-5 lines and return the response in JSON format with rating field (as a number) and feedback field.`;
-
+  
     try {
       const aiResult = await chatSession.sendMessage(feedbackPrompt);
       console.log("AI Result:", aiResult);
       const feedbackResponse = aiResult.response.text().replace('```json', '').replace('```', '');
       const jsonFeedbackResponse = JSON.parse(feedbackResponse);
-
+  
       const rating = Number(jsonFeedbackResponse.rating);
       if (isNaN(rating)) {
         throw new Error("Invalid rating received from AI response");
       }
-
+  
       console.log("Parsed Feedback Response:", jsonFeedbackResponse);
-
-      await Feedback.findOneAndUpdate(
-        { interviewId: interviewData.interviewId },
-        { feedback: jsonFeedbackResponse.feedback, rating: rating },
-        { upsert: true, new: true }
-      );
-
-      toast("Answer saved successfully!");
+  
+      const response = await axios.post('http://localhost:3000/feed/feedback', {
+        interviewId: interviewData.interviewId,
+        feedback: jsonFeedbackResponse.feedback,
+        rating: rating,
+      });
+  
+      if (response.status === 200) {
+        toast("Answer updated Successfully!");
+      } else {
+        toast("Unexpected error occurred!");
+      }
     } catch (error) {
       console.error("Error storing answer:", error);
       toast("Failed to save answer!");
     }
-
+  
     setUserAnswerResponse('');
     setLoading(false);
   };
+  
 
   return (
-    <div className={`flex flex-col justify-between p-4 gap-5 transition-opacity ${loading ? 'opacity-50' : 'opacity-100'}`}>      
+    <div className={`flex flex-col justify-between p-4 gap-5 transition-opacity ${loading ? 'opacity-50' : 'opacity-100'}`}>
+      
       <div className="relative flex justify-center">
         {webCam ? (
           <Webcam
@@ -133,7 +125,7 @@ function Record({ questionData, questionIndex, interviewData }) {
       </div>
 
       <button
-        onClick={sendAnswerToDatabase}
+        onClick={sendAnswerToBackend}
         className="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition-all disabled:bg-gray-500 disabled:cursor-not-allowed"
         disabled={loading}
       >
