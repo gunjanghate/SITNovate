@@ -10,7 +10,7 @@ dotenv.config();
 const PORT = 3000;
 const app = express();
 app.use(cors({
-   origin: 'http://localhost:3001',
+   origin: '*',
    methods: ['POST', 'GET', 'PUT', 'DELETE'],
    allowedHeaders: ['Content-Type'],
 }));
