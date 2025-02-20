@@ -88,12 +88,12 @@ function AddNew() {
                 className='p-12 w-fit  rounded-lg border-2 hover:border-b-4 transition-all hover:scale-105 border-slate-300 duration-300 mx-auto shadow-md cursor-none motion-preset-flomoji-🚀'
                 onClick={() => setDialogState(true)}
             >
-                <h2 className='font-semibold text-xl text-center hover:text-blue-300'>Create New +</h2>
+                <h2 className='font-semibold text-xl text-center hover:text-neutral-800'>Create New +</h2>
             </div>
 
             {dialogState && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
+                    <div className="bg-white text-black p-6 rounded-lg shadow-lg w-96 relative">
                         <h2 className="text-2xl font-bold">Before we start! Let's get to know some details</h2>
                         <form onSubmit={onSubmit} className="flex flex-col gap-4 mt-4">
                             <label className="font-semibold">Job Role 📝</label>
