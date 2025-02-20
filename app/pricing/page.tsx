@@ -101,7 +101,7 @@ function PriceCompo() {
           {/* Basic Subscription */}
           <PricingCard
             title="Basic"
-            price={29}
+            price={10}
             period="month"
             icon={Book}
             features={[
@@ -116,7 +116,7 @@ function PriceCompo() {
           {/* Pro Subscription */}
           <PricingCard
             title="Pro"
-            price={79}
+            price={15}
             period="month"
             icon={Crown}
             popular={true}
@@ -133,7 +133,7 @@ function PriceCompo() {
           {/* Starter Token Pack */}
           <PricingCard
             title="Token Starter"
-            price={49}
+            price={5}
             icon={Zap}
             tokenBased={true}
             tokens={50}
@@ -149,7 +149,7 @@ function PriceCompo() {
           {/* Premium Token Pack */}
           <PricingCard
             title="Token Premium"
-            price={99}
+            price={10}
             icon={Sparkles}
             tokenBased={true}
             tokens={120}

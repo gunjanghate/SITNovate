@@ -1,15 +1,16 @@
-"use client"; 
+"use client";
 
 import { useState } from "react";
 import axios from "axios";
 import {
   TextField,
   Button,
-  Typography,
   CircularProgress,
   Select,
   MenuItem,
   Container,
+  Typography,
+  Box,
 } from "@mui/material";
 import FormattedResponse from "./../../components/FormattedResponse"; // Import the formatted response component
 
@@ -57,44 +58,50 @@ export default function Home() {
   };
 
   return (
-    <Container maxWidth="md" style={{ marginTop: "20px", textAlign: "center" }} className="text-lg ">
-      <h2 variant="h4" className="text-3xl font-extrabold"
-      gutterBottom>
-        ATS Resume Analyzer
-      </h2>
+    <Box display="flex" flexDirection="column" minHeight="100vh">
+      <Container maxWidth="md" style={{ marginTop: "20px", textAlign: "center", flex: 1 }} className="text-lg">
+        <Typography variant="h4" className="text-3xl font-extrabold" gutterBottom>
+          ATS Resume Analyzer
+        </Typography>
 
-      <TextField
-        fullWidth
-        label="Job Description"
-        multiline
-        rows={4}
-        value={jobDescription}
-        onChange={(e) => setJobDescription(e.target.value)}
-        margin="normal"
-      />
+        <TextField
+          fullWidth
+          label="Job Description"
+          multiline
+          rows={4}
+          value={jobDescription}
+          onChange={(e) => setJobDescription(e.target.value)}
+          margin="normal"
+        />
 
-      <input type="file" accept="application/pdf" onChange={handleFileChange} style={{ margin: "10px 0" }} />
+        <input type="file" accept="application/pdf" onChange={handleFileChange} style={{ margin: "10px 0" }} />
 
-      {/* Dropdown for selecting prompt type */}
-      <Select
-        value={promptType}
-        onChange={(e) => setPromptType(e.target.value)}
-        fullWidth
-        displayEmpty
-        sx={{ marginTop: 2, marginBottom: 2 }}
-      >
-        <MenuItem value="resume_analysis">Resume Analysis</MenuItem>
-        <MenuItem value="ats_match">ATS Match</MenuItem>
-        <MenuItem value="project_suggestions">Project Ideas</MenuItem>
-        <MenuItem value="resume_improvement">Resume Improvements</MenuItem>
-      </Select>
+        {/* Dropdown for selecting prompt type */}
+        <Select
+          value={promptType}
+          onChange={(e) => setPromptType(e.target.value)}
+          fullWidth
+          displayEmpty
+          sx={{ marginTop: 2, marginBottom: 2 }}
+        >
+          <MenuItem value="resume_analysis">Resume Analysis</MenuItem>
+          <MenuItem value="ats_match">ATS Match</MenuItem>
+          <MenuItem value="project_suggestions">Project Ideas</MenuItem>
+          <MenuItem value="resume_improvement">Resume Improvements</MenuItem>
+        </Select>
 
-      <Button variant="contained" color="primary" onClick={analyzeResume} disabled={loading} fullWidth>
-        {loading ? <CircularProgress size={24} /> : buttonLabels[promptType]}
-      </Button>
+        <Button variant="contained" color="primary" onClick={analyzeResume} disabled={loading} fullWidth>
+          {loading ? <CircularProgress size={24} /> : buttonLabels[promptType]}
+        </Button>
 
-      {/* Render formatted AI response */}
-      {result && <FormattedResponse result={result} />}
-    </Container>
+        {/* Render formatted AI response */}
+        {result && <FormattedResponse result={result} />}
+      </Container>
+
+      {/* Footer fixed to bottom */}
+      <Box component="footer" sx={{ mt: "auto", py: 2, textAlign: "center", fontSize: "14px", color: "#666" }}>
+        <Typography variant="body2">&copy; {new Date().getFullYear()} ATS Resume Analyzer. All rights reserved.</Typography>
+      </Box>
+    </Box>
   );
 }
