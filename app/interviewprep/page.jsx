@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { LoaderPinwheel } from 'lucide-react';
 import { v4 as uuidv4 } from "uuid";
 import { chatSession } from '../../utils/gemini.ts';
+
 function AddNew() {
     const [dialogState, setDialogState] = useState(false);
     const [jobRole, setJobRole] = useState('');
@@ -14,14 +15,13 @@ function AddNew() {
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [jsonResponse, setJsonResponse] = useState('');
     const [loading, setLoading] = useState(false);
-    const [questions, setquestions] = useState([])
+    const [questions, setQuestions] = useState([]);
     const router = useRouter();
 
-    
     const onSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-    
+
         const formData = {
             jobRole,
             jobDescription,
@@ -29,49 +29,53 @@ function AddNew() {
             interviewId: uuidv4(),
             questions: [...questions], // Ensure questions is an array
         };
-    
-        const InputPrompt = `Generate 5 tailored interview questions based on the ${jobRole}, ${jobDescription}, and ${yearsOfExperience}. Carefully consider the candidate's level of expertise based on ${yearsOfExperience}, the job requirements based on the ${jobDescription}, and the necessary skills and qualifications needed for the position based on ${jobRole}. Aim is to create a list of pertinent, technical, and insightful interview questions that will effectively assess the candidate's suitability for the given ${jobRole}. Only Generate Questions and their Answers in JSON file format strictly with no Markdown tags or styling or new line tags.`;
-    
+
+        const InputPrompt = `Generate 5 tailored interview questions based on the ${jobRole}, ${jobDescription}, and ${yearsOfExperience}. Carefully consider the candidate's level of expertise based on ${yearsOfExperience}, the job requirements based on the ${jobDescription}, and the necessary skills and qualifications needed for the position based on ${jobRole}. 
+        Aim is to create a list of pertinent, technical, and insightful interview questions that will effectively assess the candidate's suitability for the given ${jobRole}. 
+        Only Generate Questions and their Answers in JSON format with no Markdown tags, new lines, or extra text.`;
+
         try {
             const result = await chatSession.sendMessage(InputPrompt);
-            console.log("Result from GPT-3:", result.response.text());
-    
-            let JSONResponse = result.response.text().replace('```json', '').replace('```', '').trim();
-    
+            let rawResponse = result.response.text();
+
+            // Remove Markdown formatting like ```json and ```
+            let cleanedResponse = rawResponse.replace(/```json|```/g, "").trim();
+
+            let parsedJSON;
             try {
-                JSONResponse = JSON.parse(JSONResponse); // ✅ Convert string to JSON
+                parsedJSON = JSON.parse(cleanedResponse);
             } catch (error) {
-                console.error("Failed to parse JSON response:", error);
+                console.error("❌ Failed to parse JSON response:", error);
+                console.log("⚠️ Raw Response:", cleanedResponse);
                 return;
             }
-    
-            setJsonResponse(JSONResponse);
-            setquestions(JSONResponse); // ✅ Set as an array
-            formData.questions = JSONResponse; // ✅ Assign parsed array to formData.questions
-    
-            console.log("Parsed Questions:", formData.questions);
-    
+
+            setJsonResponse(parsedJSON);
+            setQuestions(parsedJSON); // ✅ Set as an array
+            formData.questions = parsedJSON; // ✅ Assign parsed array to formData.questions
+
+            console.log("✅ Parsed Questions:", formData.questions);
+
             const response = await axios.post('http://localhost:3000/api/job', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-    
-            console.log("Response from server:", response.data.job);
-    
+
+            console.log("✅ Response from server:", response.data.job);
+
             if (response.data.job.interviewId) {
                 router.replace(`/interview/${response.data.job.interviewId}`);
             } else {
-                console.error("interviewId is missing in the response:", response.data);
+                console.error("❌ interviewId is missing in the response:", response.data);
             }
         } catch (error) {
-            console.error("Error processing request:", error);
+            console.error("❌ Error processing request:", error);
         } finally {
             setLoading(false);
             setDialogState(false);
         }
     };
-    
 
     React.useEffect(() => {
         setIsButtonDisabled(!(jobRole && jobDescription && yearsOfExperience));
@@ -152,4 +156,3 @@ function AddNew() {
 }
 
 export default AddNew;
-

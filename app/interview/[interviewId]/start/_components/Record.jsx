@@ -5,9 +5,23 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import Webcam from 'react-webcam';
 import { toast } from 'sonner';
-import axios from 'axios';
+import mongoose from 'mongoose';
 import { chatSession } from '../../../../../utils/gemini';
 import { useSpeechRecognition } from "../../../../../hooks/useSpeechRecognition";
+
+// Connect to MongoDB
+mongoose.connect("mongodb+srv://shayanqureshi2411:SpZl9z3wjtJ6XnBW@cluster0.j96ad.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const feedbackSchema = new mongoose.Schema({
+  interviewId: { type: String, unique: true },
+  feedback: String,
+  rating: Number,
+});
+
+const Feedback = mongoose.models.Feedback || mongoose.model("Feedback", feedbackSchema);
 
 function Record({ questionData, questionIndex, interviewData }) {
   const [userAnswerResponse, setUserAnswerResponse] = useState('');
@@ -32,11 +46,7 @@ function Record({ questionData, questionIndex, interviewData }) {
   }, [isRecording, transcript]);
 
   const toggleRecording = () => {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording();
-    }
+    isRecording ? stopRecording() : startRecording();
   };
 
   const sendAnswerToBackend = async () => {
@@ -74,9 +84,11 @@ function Record({ questionData, questionIndex, interviewData }) {
         toast("Failed to save answer!");
     }
 
+
     setUserAnswerResponse('');
     setLoading(false);
   };
+
 
   return (
     <div className={`flex flex-col justify-between p-3 gap-3 md:gap-5 ${loading ? 'opacity-15' : 'opacity-100'}`}>
@@ -106,34 +118,32 @@ function Record({ questionData, questionIndex, interviewData }) {
 
         <button
           onClick={toggleRecording}
-          className="text-sm ring-2 ring-white bg-slate-600 hover:bg-slate-500 transition-colors p-2 rounded-md font-semibold"
+          className="text-sm bg-slate-700 hover:bg-slate-600 transition-all px-4 py-2 rounded-md font-semibold text-white shadow-md"
         >
           {isRecording ? (
-            <p className="text-red-200 animate-pulse">Stop 🎙️</p>
+            <span className="text-red-200 animate-pulse">Stop 🎙️</span>
           ) : (
-            <p className="text-emerald-300">Answer 🔊</p>
+            <span className="text-emerald-300">Answer 🔊</span>
           )}
         </button>
       </div>
 
-      <div className="bg-card p-6 rounded-lg shadow-sm min-h-[200px]">
+      <div className="bg-gray-900 text-white p-5 rounded-xl shadow-lg min-h-[200px] border border-gray-700">
         {error && (
-          <div className="bg-destructive/10 text-destructive p-4 rounded-lg flex items-center gap-2">
+          <div className="bg-red-500/10 text-red-400 p-4 rounded-lg flex items-center gap-2">
             <p>{error}</p>
           </div>
         )}
         {transcript ? (
           <p className="whitespace-pre-wrap">{transcript}</p>
         ) : (
-          <p className="text-muted-foreground text-center italic">
-            Your transcription will appear here...
-          </p>
+          <p className="text-gray-400 text-center italic">Your transcription will appear here...</p>
         )}
       </div>
 
       <button
-        onClick={sendAnswerToBackend}
-        className="mt-3 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg shadow-md transition"
+        onClick={sendAnswerToDatabase}
+        className="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition-all disabled:bg-gray-500 disabled:cursor-not-allowed"
         disabled={loading}
       >
         Submit Answer
