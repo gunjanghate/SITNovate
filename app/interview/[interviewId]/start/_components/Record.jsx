@@ -5,23 +5,11 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import Webcam from 'react-webcam';
 import { toast } from 'sonner';
-import mongoose from 'mongoose';
+import axios from 'axios';
+
 import { chatSession } from '../../../../../utils/gemini';
 import { useSpeechRecognition } from "../../../../../hooks/useSpeechRecognition";
 
-// Connect to MongoDB
-mongoose.connect("mongodb+srv://shayanqureshi2411:SpZl9z3wjtJ6XnBW@cluster0.j96ad.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-const feedbackSchema = new mongoose.Schema({
-  interviewId: { type: String, unique: true },
-  feedback: String,
-  rating: Number,
-});
-
-const Feedback = mongoose.models.Feedback || mongoose.model("Feedback", feedbackSchema);
 
 function Record({ questionData, questionIndex, interviewData }) {
   const [userAnswerResponse, setUserAnswerResponse] = useState('');
@@ -48,10 +36,8 @@ function Record({ questionData, questionIndex, interviewData }) {
   const toggleRecording = () => {
     isRecording ? stopRecording() : startRecording();
   };
-
-  const sendAnswerToBackend = async () => {
-    setLoading(true);
     
+  const sendAnswerToDatabase = async () => {
     const feedbackPrompt = `Question: ${questionData[questionIndex].question}, User Answer: ${userAnswerResponse}. 
     On the basis of the question and user answer, give a rating (out of 5) for the answer and a feedback. 
     Also compare it with the Default Answer: ${questionData[questionIndex].answer} for better comparison. 
