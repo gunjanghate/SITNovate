@@ -73,14 +73,18 @@ export const handleJobByIdFetch = (async (req, res) => {
 
 export const handleGetQuestionsById = async (req, res) => {
     try {
-        const job = await Job.find({interviewId: req.params.interviewId});
+        const job = await Job.findOne({ interviewId: req.params.interviewId }); // Use findOne()
+
         if (!job) {
             return res.status(404).json({ error: "Job not found" });
         }
-        res.status(200).json( job[0].questions );
+
+        res.status(200).json(job.questions); // Directly access job.questions
     } catch (error) {
         console.error("Database error:", error);
-        res.status(500).json({ error: "Failed to fetch job" });
+        res.status(500).json({ error: "Failed to fetch job questions" });
     }
 };
+
+
 

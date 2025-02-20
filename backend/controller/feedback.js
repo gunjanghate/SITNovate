@@ -1,27 +1,23 @@
-import feedback from "../model/feedback.js";
-export const handlePostFeedback = async (req, res) => {
+import Feedback from "../model/feedback.js";
 
-    const { feedback,rating, interviewId } = req.body;
 
+export const handleAddFeedback = async (req, res) => {
+    const {interviewId, feedback , rating} = req.body;
+    const newFeedback = new Feedback({interviewId, feedback , rating});
     try {
-        const newFeedback = new feedback({
-            interviewId,
-            feedback,
-            rating
-        });
-
         await newFeedback.save();
-
-        res.status(201).json({ message: "Feedback saved successfully!", data: newFeedback });
+        res.status(201).json({ message: "Feedback added successfully" });
     } catch (error) {
-        res.status(409).json({ message: error.message });
+        console.error("Database error:", error);
+        res.status(500).json({ error: "Failed to add feedback" });
     }
-};
+}
+
 
 export const handleGetFeedback = async (req, res) => {
     const interviewId = req.params.interviewId;
     try {
-        const feedbacks = await feedback.find(interviewId);
+        const feedbacks = await Feedback.find({interviewId});
         res.status(200).json({ feedbacks });
     } catch (error) {
         console.error("Database error:", error);

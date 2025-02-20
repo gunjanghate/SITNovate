@@ -13,6 +13,10 @@ function Record({ questionData, questionIndex, interviewData }) {
   const [userAnswerResponse, setUserAnswerResponse] = useState('');
   const [webCam, setWebCam] = useState(true);
   const [loading, setLoading] = useState(false);
+
+  const pathname = window.location.pathname;
+  const interviewId = pathname.split('/')[2];
+  
   const {
     isRecording,
     transcript,
@@ -31,6 +35,7 @@ function Record({ questionData, questionIndex, interviewData }) {
     isRecording ? stopRecording() : startRecording();
   };
 
+  const sendAnswerToBackend = async () => {
   const sendAnswerToBackend = async () => {
     setLoading(true);
   
@@ -61,8 +66,8 @@ function Record({ questionData, questionIndex, interviewData }) {
         toast("Unexpected error occurred!");
       }
     } catch (error) {
-      console.error("Error storing answer:", error);
-      toast("Failed to save answer!");
+        console.error("Error storing answer:", error);
+        toast("Failed to save answer!");
     }
   
     setUserAnswerResponse('');
@@ -94,9 +99,9 @@ function Record({ questionData, questionIndex, interviewData }) {
       <div className="flex justify-between items-center">
         <button
           onClick={() => setWebCam(!webCam)}
-          className="rounded-full w-9 h-9 bg-red-500 text-xs flex items-center justify-center text-white hover:bg-red-600 transition-all shadow-md"
+          className="rounded-full w-7 h-7 bg-red-500 text-xs flex items-center justify-center text-white hover:bg-red-600 transition-colors"
         >
-          <CameraIcon width={18} />
+          <CameraIcon width={16} />
         </button>
 
         <button

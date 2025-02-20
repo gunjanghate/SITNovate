@@ -33,7 +33,7 @@ function Start({ params }) {
           if (response.data) {
             console.log("Fetched interview details successfully:", response.data);
 
-            setInterviewData(response.data);
+            setInterviewData(...response.data, interviewId);
             setQuestionData(response.data || []);
           } else {
             console.log("No interview data found.");
@@ -87,7 +87,7 @@ function Start({ params }) {
               )}
             </div>
             {questionIndex === questionData.length - 1 && interviewData && (
-              <Link href={`/dashboard/interview/${interviewData.interviewId}/feedback`}>
+              <Link href={`/feed/feedback/${interviewId}`}>
                 <button className="flex gap-1 rounded-lg items-center bg-blue-700 text-white p-3 hover:bg-blue-800 transition-colors">
                   End Interview
                 </button>
