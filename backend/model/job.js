@@ -26,8 +26,7 @@ const jobSchema = new mongoose.Schema({
     },
     interviewId: {
         type: String,
-        required: true,
-        unique: true  // Ensures no duplicate interview IDs
+        required: true,// Ensures no duplicate interview IDs
     },
     questions: {
         type: [questionSchema], 
