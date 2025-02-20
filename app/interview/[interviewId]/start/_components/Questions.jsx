@@ -11,21 +11,23 @@ function Questions({ questionData, questionIndex }) {
   };
 
   return (
-    <div className="flex flex-col justify-evenly border border-slate-300 shadow-md w-full md:w-2/3 rounded-3xl">
-      <div className="mt-3 p-3 grid grid-cols-3 md:grid-cols-3 gap-2">
+    <div className="flex flex-col justify-evenly border border-slate-300 shadow-md w-full md:w-2/3 rounded-3xl bg-black text-white">
+      <div className="mt-3 p-3 py-1 flex flex-row flex-wrap gap-2">
         {questionData.map((question, index) => (
           <h2
             key={index}
-            className={`font-semibold p-2 text-center bg-blue-300 rounded-full text-[10px] md:text-[14px] cursor-pointer ${
-              questionIndex === index && "bg-blue-600 text-white"
-            } transition-colors`}
+            className={`font-semibold px-2 py-3 w-44 flex justify-center items-center border-2 border-white rounded-full text-[xl] md:text-[2xl] lg:text-2xl cursor-pointer transition-colors ${
+              questionIndex === index
+                ? "bg-blue-300 text-black"
+                : "bg-blue-100/50 text-white"
+            }`}
           >
             Question #{index + 1}
           </h2>
         ))}
       </div>
       <div className="flex flex-col gap-2 p-3 text-[16px] md:text-[20px]">
-        <p>{questionData[questionIndex].question}</p>
+        <p>Q. {questionData[questionIndex].question}</p>
         <div className="flex items-center gap-2 text-blue-400">
           <Volume2
             width={20}

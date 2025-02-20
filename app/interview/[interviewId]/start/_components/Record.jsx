@@ -5,9 +5,23 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import Webcam from 'react-webcam';
 import { toast } from 'sonner';
-import axios from 'axios';
+import mongoose from 'mongoose';
 import { chatSession } from '../../../../../utils/gemini';
 import { useSpeechRecognition } from "../../../../../hooks/useSpeechRecognition";
+
+// Connect to MongoDB
+mongoose.connect("mongodb+srv://shayanqureshi2411:SpZl9z3wjtJ6XnBW@cluster0.j96ad.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const feedbackSchema = new mongoose.Schema({
+  interviewId: { type: String, unique: true },
+  feedback: String,
+  rating: Number,
+});
+
+const Feedback = mongoose.models.Feedback || mongoose.model("Feedback", feedbackSchema);
 
 function Record({ questionData, questionIndex, interviewData }) {
   const [userAnswerResponse, setUserAnswerResponse] = useState('');
@@ -28,109 +42,99 @@ function Record({ questionData, questionIndex, interviewData }) {
   }, [isRecording, transcript]);
 
   const toggleRecording = () => {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording();
-    }
+    isRecording ? stopRecording() : startRecording();
   };
-  const sendAnswerToBackend = async () => {
+
+  const sendAnswerToDatabase = async () => {
     setLoading(true);
-    
-    const feedbackPrompt = `Question: ${questionData[questionIndex].question}, User Answer: ${userAnswerResponse}. On the basis of the question and user answer, give us rating (out of 5) for the answer and the feedback, if there is any area of improvement needed include it in the feedback. Also compare with the Default Answer: ${questionData[questionIndex].answer} for ease of comparison. Keep the feedback of 3-5 lines and return the response in JSON format with rating field and feedback field.`;
-    
+
+    const feedbackPrompt = `Question: ${questionData[questionIndex].question}, User Answer: ${userAnswerResponse}. On the basis of the question and user answer, give us rating (out of 5) for the answer and the feedback, if there is any area of improvement needed include it in the feedback. Also compare with the Default Answer: ${questionData[questionIndex].answer} for ease of comparison. Keep the feedback of 3-5 lines and return the response in JSON format with rating field (as a number) and feedback field.`;
+
     try {
       const aiResult = await chatSession.sendMessage(feedbackPrompt);
       console.log("AI Result:", aiResult);
-      const feedbackResponse = (aiResult.response.text()).replace('```json', '').replace('```', '');
+      const feedbackResponse = aiResult.response.text().replace('```json', '').replace('```', '');
       const jsonFeedbackResponse = JSON.parse(feedbackResponse);
-      console.log("Parsed Feedback Response:", jsonFeedbackResponse);
-  
-      const response = await axios.post('/api/store-answer', {
-        interviewId: interviewData.interviewId,
-        question: questionData[questionIndex].question,
-        correctAnswer: questionData[questionIndex].answer,
-        userAnswer: userAnswerResponse,
-        feedback: jsonFeedbackResponse.feedback,
-        rating: jsonFeedbackResponse.rating,
-        transcript: userAnswerResponse, // Storing transcript
-        createdAtTime: new Date().toISOString()
-      });
-      
-      if (response.status === 200) {
-        toast("Answer saved Successfully!");
-      } else {
-        toast("Unexpected error occurred!");
+
+      const rating = Number(jsonFeedbackResponse.rating);
+      if (isNaN(rating)) {
+        throw new Error("Invalid rating received from AI response");
       }
+
+      console.log("Parsed Feedback Response:", jsonFeedbackResponse);
+
+      await Feedback.findOneAndUpdate(
+        { interviewId: interviewData.interviewId },
+        { feedback: jsonFeedbackResponse.feedback, rating: rating },
+        { upsert: true, new: true }
+      );
+
+      toast("Answer saved successfully!");
     } catch (error) {
       console.error("Error storing answer:", error);
       toast("Failed to save answer!");
     }
-  
+
     setUserAnswerResponse('');
-    setResults([]);
     setLoading(false);
   };
-  
-  return (
-    <div className={`flex flex-col justify-between p-3 gap-3 md:gap-5 ${loading ? 'opacity-15' : 'opacity-100'}`}>
-      {webCam ? (
-        <Webcam
-          onUserMedia={() => setWebCam(true)}
-          onUserMediaError={() => setWebCam(false)}
-          className="rounded-lg transition-all duration-150"
-        />
-      ) : (
-        <Image
-  src={"https://via.placeholder.com/500"} 
-  alt="Bliss"
-  height={500} 
-  width={500}
-  className="object-contain rounded-lg transition-all duration-150 w-full"
-/>
 
-      )}
+  return (
+    <div className={`flex flex-col justify-between p-4 gap-5 transition-opacity ${loading ? 'opacity-50' : 'opacity-100'}`}>      
+      <div className="relative flex justify-center">
+        {webCam ? (
+          <Webcam
+            onUserMedia={() => setWebCam(true)}
+            onUserMediaError={() => setWebCam(false)}
+            className="rounded-xl shadow-lg border border-gray-300 transition-all duration-150"
+          />
+        ) : (
+          <Image
+            src="https://via.placeholder.com/500"
+            alt="Bliss"
+            height={500}
+            width={500}
+            className="object-contain rounded-xl shadow-lg border border-gray-300 transition-all duration-150 w-full"
+          />
+        )}
+      </div>
 
       <div className="flex justify-between items-center">
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => setWebCam(!webCam)}
-            className="rounded-full w-7 h-7 bg-red-500 text-xs flex items-center justify-center text-white hover:bg-red-600 transition-colors"
-          >
-            <CameraIcon width={16} />
-          </button>
-        </div>
+        <button
+          onClick={() => setWebCam(!webCam)}
+          className="rounded-full w-9 h-9 bg-red-500 text-xs flex items-center justify-center text-white hover:bg-red-600 transition-all shadow-md"
+        >
+          <CameraIcon width={18} />
+        </button>
 
         <button
           onClick={toggleRecording}
-          className="text-sm ring-2 ring-white bg-slate-600 hover:bg-slate-500 transition-colors p-2 rounded-md font-semibold"
+          className="text-sm bg-slate-700 hover:bg-slate-600 transition-all px-4 py-2 rounded-md font-semibold text-white shadow-md"
         >
           {isRecording ? (
-            <p className="text-red-200 animate-pulse">Stop 🎙️</p>
+            <span className="text-red-200 animate-pulse">Stop 🎙️</span>
           ) : (
-            <p className="text-emerald-300">Answer 🔊</p>
+            <span className="text-emerald-300">Answer 🔊</span>
           )}
         </button>
       </div>
 
-      <div className="bg-card p-6 rounded-lg shadow-sm min-h-[200px]">
+      <div className="bg-gray-900 text-white p-5 rounded-xl shadow-lg min-h-[200px] border border-gray-700">
         {error && (
-          <div className="bg-destructive/10 text-destructive p-4 rounded-lg flex items-center gap-2">
+          <div className="bg-red-500/10 text-red-400 p-4 rounded-lg flex items-center gap-2">
             <p>{error}</p>
           </div>
         )}
         {transcript ? (
           <p className="whitespace-pre-wrap">{transcript}</p>
         ) : (
-          <p className="text-muted-foreground text-center italic">
-            Your transcription will appear here...
-          </p>
+          <p className="text-gray-400 text-center italic">Your transcription will appear here...</p>
         )}
       </div>
 
       <button
-        onClick={sendAnswerToBackend}
-        className="mt-3 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg shadow-md transition"
+        onClick={sendAnswerToDatabase}
+        className="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition-all disabled:bg-gray-500 disabled:cursor-not-allowed"
         disabled={loading}
       >
         Submit Answer

@@ -56,12 +56,12 @@ function Start({ params }) {
   console.log(questionData.length);
 
   return (
-    <div className="p-5">
+    <div className="p-5 bg-black">
       {questionData.length > 0 ? (
         <>
           <div className="flex flex-col md:flex-row gap-10">
             <Questions questionData={questionData} questionIndex={questionIndex} />
-            <div className="rounded-xl w-full md:w-1/3 bg-slate-700">
+            <div className="rounded-xl w-full md:w-1/3 ">
               <Record questionData={questionData} questionIndex={questionIndex} interviewData={interviewData} />
             </div>
           </div>
@@ -96,9 +96,10 @@ function Start({ params }) {
           </div>
         </>
       ) : (
-        <div className="h-[80vh] flex items-center justify-center">
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white/70 z-50">
           <Loader2Icon className="animate-spin size-16 text-blue-500" />
         </div>
+        
       )}
     </div>
   );

@@ -58,10 +58,11 @@ export default function Home() {
   };
 
   return (
-    <Container maxWidth="md" style={{ marginTop: "20px", textAlign: "center" }}>
-      <Typography variant="h4" gutterBottom>
+    <Container maxWidth="md" style={{ marginTop: "20px", textAlign: "center" }} className="text-lg ">
+      <h2 variant="h4" className="text-3xl font-extrabold"
+      gutterBottom>
         ATS Resume Analyzer
-      </Typography>
+      </h2>
 
       <TextField
         fullWidth
