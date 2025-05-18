@@ -6,14 +6,12 @@ import { motion } from "framer-motion";
 import { HeroHighlight, Highlight } from "../components/ui/hero-highlight"
 import { PointerWrapper } from "../components/magicui/pointer";
 import { GlareCard } from "../components/ui/glare-card";
+import Link from "next/link";
 
 
 function Main() {
   const router = useRouter();
 
-  const handleStartNowClick = () => {
-    router.push("/resume");
-  };
 
   const handleInterviewPrepClick = () => {
     // window.location.href = "https://prep-ai-hazel.vercel.app/";
@@ -48,17 +46,17 @@ function Main() {
             time and helping you find the perfect candidates while preparing for
             interviews.
 
-            <div className="button mt-12 border-2 px-3 text-2xl hover:text-blue-300 drop-shadow-xl hover:scale-110 hover:border-b-4 font-bold transition-all duration-500 rounded-sm py-1 border-white w-fit h-fit">
+            <Link href={"#features"} className="button mt-12 border-2 px-3 text-2xl hover:text-blue-300 drop-shadow-xl hover:scale-110 hover:border-b-4 font-bold transition-all duration-500 rounded-sm py-1 border-white w-fit h-fit ">
               Get started
-            </div>
+            </Link>
           </motion.div>
         </div>
       </HeroHighlight>
 
-      <div id="#features" className="flex flex-col gap-5 items-center justify-center lg:space-x-8 mt-10 lg:mt-16">
+      <div  className="flex flex-col gap-5 items-center justify-center lg:space-x-8 mt-10 lg:mt-16">
         <h1 className="text-white text-5xl tracking-tighter font-extrabold">Features</h1>
         {/* Card 1 */}
-      <div className="flex lg:flex-row lg:flex-wrap mx-auto flex-col gap-5 items-center justify-center lg:space-x-8 mt-10 lg:mt-16">
+      <div id="#features"  className="flex lg:flex-row lg:flex-wrap mx-auto flex-col gap-5 items-center justify-center lg:space-x-8 mt-10 lg:mt-16">
 
      
         <motion.div
@@ -75,17 +73,18 @@ function Main() {
             alt="Resume Shortlisting"
           /> */}
           <p className="text-center text-3xl font-bold text-blue-500">
-            Resume Shortlisting
+            Realtime Job Internships Finder
           </p>
-          <div className="text-center text-gray-600 w-3/4 md:text-lg mt-1">
-            Curating resumes efficiently to match top talent with organizational
-            roles.
+          <div className="text-center text-gray-400 w-3/4 md:text-lg lg:text-md mt-1">
+          A platform that aggregates job and internship listings from various sources, allows users to search and filter listings, and provides real-time updates. 
           </div>
           <motion.button
-            className="bg-[#3B82F6] text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-5 cursor-none"
+            className="bg-[#3B82F6] text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-400 transition durat lg:text-mdion-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-5 "
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={handleStartNowClick}
+            onClick={()=>{
+              router.push("/opportunities");
+            }}
           >
             Click Here
           </motion.button>
@@ -110,12 +109,12 @@ function Main() {
           <p className="text-center text-3xl font-bold text-blue-500 mt-5 ">
             Interview Prep
           </p>
-          <div className="text-center text-gray-600 w-3/4 md:text-lg mt-1">
+          <div className="text-center text-gray-400 w-3/4 md:text-lg lg:text-md mt-1">
             AI-driven interview prep: feedback, skill analysis, progress
             tracking, alignment.
           </div>
           <motion.button
-            className="bg-[#3B82F6] text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-5 cursor-none"
+            className="bg-[#3B82F6] text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-400 transition durat lg:text-mdion-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-5 "
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleInterviewPrepClick}
@@ -131,6 +130,9 @@ function Main() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            onClick={()=>{
+              router.push("/resume");
+            }}
           >
             {/* <Image
             src="/assets/Group 39.png"
@@ -141,15 +143,17 @@ function Main() {
             <p className="text-center text-3xl font-bold text-blue-500">
               Resume Shortlisting
             </p>
-            <div className="text-center text-gray-600 w-3/4 md:text-lg mt-1">
+            <div className="text-center text-gray-400 w-3/4 md:text-lg lg:text-md mt-1">
               Curating resumes efficiently to match top talent with organizational
               roles.
             </div>
             <motion.button
-              className="bg-[#3B82F6] text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-5 cursor-none"
+              className="bg-[#3B82F6] text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-400 transition durat lg:text-mdion-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-5 "
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={handleStartNowClick}
+              onClick={()=>{
+                router.push("/resume");
+              }}
             >
               Click Here
             </motion.button>
@@ -163,7 +167,9 @@ function Main() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-          >
+            onClick={() => {
+              router.push("https://api.whatsapp.com/send/?phone=%2B14155238886&text&type=phone_number&app_absent=0");
+          }}>
             {/* <Image
             src="/assets/Group 39.png"
             width={200}
@@ -171,17 +177,16 @@ function Main() {
             alt="Resume Shortlisting"
           /> */}
             <p className="text-center text-3xl font-bold text-blue-500">
-              Resume Shortlisting
+              AI-Driven Whatsapp Bot
             </p>
-            <div className="text-center text-gray-600 w-3/4 md:text-lg mt-1">
-              Curating resumes efficiently to match top talent with organizational
-              roles.
+            <div className="text-center text-gray-400 w-3/4 md:text-lg lg:text-md mt-1">
+            An intelligent chatbot that automates conversations on WhatsApp using AI and NLP. 
             </div>
             <motion.button
-              className="bg-[#3B82F6] text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-5 cursor-none"
+              className="bg-[#3B82F6] text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-400 transition durat lg:text-mdion-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-5 "
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={handleStartNowClick}
+             
             >
               Click Here
             </motion.button>
@@ -205,50 +210,22 @@ function Main() {
             <p className="text-center text-3xl font-bold text-blue-500">
               Resume Shortlisting
             </p>
-            <div className="text-center text-gray-600 w-3/4 md:text-lg mt-1">
+            <div className="text-center text-gray-400 w-3/4 md:text-lg lg:text-md mt-1">
               Curating resumes efficiently to match top talent with organizational
               roles.
             </div>
             <motion.button
-              className="bg-[#3B82F6] text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-5 cursor-none"
+              className="bg-[#3B82F6] text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-400 transition durat lg:text-mdion-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-5 "
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={handleStartNowClick}
+              onClick={()=>{
+                router.push("/resume");
+              }}
             >
               Click Here
             </motion.button>
           </motion.div>
-        {/* Card 6 */}
-      
-          <motion.div
-          className="flex flex-col items-center justify-center w-[250px] h-[300px] md:w-[400px] md:h-[600px] lg:w-[290px] lg:h-[350px] rounded-xl shadow-lg hover:shadow-2xl transform transition-transform duration-300 hover:scale-105 z-100 border-2 border-white hover:border-b-8"
-          initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            {/* <Image
-            src="/assets/Group 39.png"
-            width={200}
-            height={300}
-            alt="Resume Shortlisting"
-          /> */}
-            <p className="text-center text-3xl font-bold text-blue-500">
-              Resume Shortlisting
-            </p>
-            <div className="text-center text-gray-600 w-3/4 md:text-lg mt-1">
-              Curating resumes efficiently to match top talent with organizational
-              roles.
-            </div>
-            <motion.button
-              className="bg-[#3B82F6] text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-5 cursor-none"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleStartNowClick}
-            >
-              Click Here
-            </motion.button>
-          </motion.div>
+
           </div>
       </div>
 

@@ -29,6 +29,7 @@ function Record({ questionData, questionIndex, interviewData }) {
   useEffect(() => {
     if (!isRecording && transcript.length > 0) {
       setUserAnswerResponse(transcript);
+      console.log("User Answer:", transcript);
     }
   }, [isRecording, transcript]);
 
@@ -38,8 +39,9 @@ function Record({ questionData, questionIndex, interviewData }) {
     
   const sendAnswerToDatabase = async () => {
     setLoading(true);
+    console.log("Sending answer to database:", transcript);
 
-    const feedbackPrompt = `Question: ${questionData[questionIndex].question}, User Answer: ${userAnswerResponse}. 
+    const feedbackPrompt = `Question: ${questionData[questionIndex].question}, User Answer: ${transcript}. 
     On the basis of the question and user answer, give a rating (out of 5) for the answer and a feedback. 
     Also compare it with the Default Answer: ${questionData[questionIndex].answer} for better comparison. 
     Keep feedback within 3-5 lines and return response in JSON format with "rating" and "feedback" fields.`;
@@ -141,7 +143,7 @@ function Record({ questionData, questionIndex, interviewData }) {
         </button>
       </div>
 
-      <div className="bg-gray-900 text-white p-5 rounded-xl shadow-lg min-h-[200px] border border-gray-700">
+      <div className="bg-gray-900 text-white p-2 rounded-xl shadow-lg min-h-[100px] border border-gray-700">
         {error && (
           <div className="bg-red-500/10 text-red-400 p-4 rounded-lg flex items-center gap-2">
             <p>{error}</p>

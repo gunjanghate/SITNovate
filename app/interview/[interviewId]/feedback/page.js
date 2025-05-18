@@ -121,7 +121,7 @@ function Feedback({ params: paramsPromise }) {
             
             <div className="flex justify-center mt-8">
                 <Link href="/interviewprep">
-                    <button className=" rounded-sm border-2 border-white hover:border-b-4 hover:scale-105 duration-500 cursor-none hover:text-blue-300 transition-all px-6 py-3 text-white font-semibold shadow-md">
+                    <button className=" rounded-sm border-2 border-white hover:border-b-4 hover:scale-105 duration-500 hover:text-blue-300 transition-all px-6 py-3 text-white font-semibold shadow-md">
                         Start a new Interview Prep!
                     </button>
                 </Link>

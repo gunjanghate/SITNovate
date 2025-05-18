@@ -67,7 +67,7 @@ function Start({ params }) {
               <Record questionData={questionData} questionIndex={questionIndex} interviewData={interviewData} />
             </div>
           </div>
-          <div className="mt-3 flex items-center justify-between">
+          <div className=" flex items-center justify-between">
             <div className="flex gap-2 font-semibold">
               {questionIndex > 0 && (
                 <button

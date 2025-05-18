@@ -30,7 +30,7 @@ export default function Navbar() {
                 <div className="flex items-center justify-between h-20">
                     
                     <div className="flex items-center">
-                        <Link href="/" className="flex items-center space-x-3 cursor-none">
+                        <Link href="/" className="flex items-center space-x-3 ">
                             <Image src={logo} width={70} height={90} alt="SmartHire Logo" />
                             <span className="text-3xl tracking-tighter font-bold text-blue-500"><SparklesText text="SupaPrep" /></span>
                         </Link>
@@ -38,13 +38,13 @@ export default function Navbar() {
 
                     
                     <div className="hidden md:flex items-center space-x-8">
-                        <Link href="/" className="text-white  border-2 px-3 text-lg hover:text-blue-300 drop-shadow-xl hover:scale-110 hover:border-b-4 font-bold transition-all duration-500 rounded-sm py-1 border-white w-fit h-fit cursor-none">
+                        <Link href="/" className="text-white  border-2 px-3 text-lg hover:text-blue-300 drop-shadow-xl hover:scale-110 hover:border-b-4 font-bold transition-all duration-500 rounded-sm py-1 border-white w-fit h-fit ">
                             Home
                         </Link>
-                        <Link href="#features" className="text-white border-2 px-3 text-lg hover:text-blue-300 drop-shadow-xl hover:scale-110 hover:border-b-4 font-bold transition-all duration-500 rounded-sm py-1 border-white w-fit h-fit cursor-none">
+                        <Link href="#features" className="text-white border-2 px-3 text-lg hover:text-blue-300 drop-shadow-xl hover:scale-110 hover:border-b-4 font-bold transition-all duration-500 rounded-sm py-1 border-white w-fit h-fit ">
                             Features
                         </Link>
-                        <Link href="/pricing" className="text-white border-2 px-3 text-lg hover:text-blue-300 drop-shadow-xl hover:scale-110 hover:border-b-4 font-bold transition-all duration-500 rounded-sm py-1 border-white w-fit h-fit cursor-none">
+                        <Link href="/pricing" className="text-white border-2 px-3 text-lg hover:text-blue-300 drop-shadow-xl hover:scale-110 hover:border-b-4 font-bold transition-all duration-500 rounded-sm py-1 border-white w-fit h-fit ">
                             Pricing
                         </Link>
                         {/* {session && (

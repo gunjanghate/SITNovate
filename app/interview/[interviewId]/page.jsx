@@ -42,7 +42,7 @@ function Interview() {
   }, [interviewData]);
 
   return (
-    <div className="p-5">
+    <div className="p-5 min-h-[80vh] ">
       <div className="mt-3 flex flex-col items-center justify-center">
         <h2 className="text-blue-600 text-3xl font-bold text-center underline underline-offset-4">
           Let's Get Started!
