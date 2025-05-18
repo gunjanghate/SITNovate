@@ -208,10 +208,10 @@ function Main() {
             alt="Resume Shortlisting"
           /> */}
             <p className="text-center text-3xl font-bold text-blue-500">
-              Resume Shortlisting
+              Mentor Chat
             </p>
             <div className="text-center text-gray-400 w-3/4 md:text-lg lg:text-md mt-1">
-              Curating resumes efficiently to match top talent with organizational
+              Connnect with the industrial expertise chatbot that can resolve all your queries
               roles.
             </div>
             <motion.button
@@ -219,7 +219,7 @@ function Main() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={()=>{
-                router.push("/resume");
+                router.push("/mentor-chat");
               }}
             >
               Click Here

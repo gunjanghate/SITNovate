@@ -88,7 +88,7 @@ function AddNew() {
                 className='p-12 w-fit rounded-lg border-2 hover:border-b-4 transition-all hover:scale-105 border-slate-300 duration-300 mx-auto shadow-md motion-preset-flomoji-🚀'
                 onClick={() => setDialogState(true)}
             >
-                <h2 className='font-semibold text-xl text-center hover:text-blue-300'>Create New +</h2>
+                <h2 className='font-semibold text-xl text-center hover:text-neutral-800'>Create New +</h2>
             </div>
 
             {dialogState && (

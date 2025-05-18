@@ -22,7 +22,7 @@ export default function FreelanceJobs() {
       const response = await fetch(apiUrl, {
         method: 'GET',
         headers: {
-          'x-rapidapi-key': '2aa8b40d86msh53acbf451256540p183289jsnb9476ae1f59f',
+          'x-rapidapi-key': "eb11b36559mshb4233425aba3123p148387jsn7561841049e5",
           'x-rapidapi-host': 'upwork-jobs-api2.p.rapidapi.com',
         },
       });
