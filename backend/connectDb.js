@@ -8,7 +8,6 @@ export const connectDB = async () => {
     console.log('Already connected to DB');
     return mongoose.connection;
   }
-    //new connection
   try {
     const path = process.env.MONGODB_URI;
     console.log('Connecting to DB:', path);

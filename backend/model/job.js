@@ -7,7 +7,7 @@ const questionSchema = new mongoose.Schema({
     },
     answer: {
         type: String,
-        default: ""  // Allow empty answers
+        default: ""  
     }
 }, { _id: false });
 
@@ -26,11 +26,11 @@ const jobSchema = new mongoose.Schema({
     },
     interviewId: {
         type: String,
-        required: true,// Ensures no duplicate interview IDs
+        required: true,
     },
     questions: {
         type: [questionSchema], 
-        default: []   // Ensures it's an array by default
+        default: []   
     }
 }, { timestamps: true });
 
